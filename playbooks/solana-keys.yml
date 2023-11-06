@@ -41,6 +41,11 @@
         owner: firedancer
         group: firedancer
 
+    - name: Change directory to firedancer home and run a command
+      command:
+        cmd: solana config set --keypair validator-keypair.json
+        chdir: /home/firedancer
+
     - name: Airdrop SOL to validator keypair
       command:
         cmd: solana airdrop 1 validator-keypair.json

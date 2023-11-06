@@ -70,8 +70,8 @@
 
     - name: Copy config file for firedancer user
       copy:
-        src: "../files/config.yml"
-        dest: "{{ user_home }}/config.yml"
+        src: "../files/config.toml"
+        dest: "{{ user_home }}/config.toml"
         owner: firedancer
         group: firedancer
         mode: '0644'
