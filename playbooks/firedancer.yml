@@ -6,7 +6,7 @@
     user_home: "/home/{{ ansible_user }}"
     firedancer_repo: "https://github.com/firedancer-io/firedancer.git"
     firedancer_dir: "{{ user_home }}/firedancer"
-    ledger_mount_point: "/data"
+    ledger_mount_point: "/srv/solana"
 
   tasks:
     - name: Install the latest security updates
@@ -55,12 +55,13 @@
         path: /etc/sudoers
         line: 'firedancer ALL=(ALL) NOPASSWD:ALL'
 
-    - name: Ensure ledger mount point ownership
+    - name: Ensure ledger mount point exists and set ownership
       file:
         path: "{{ ledger_mount_point }}"
         owner: firedancer
         group: firedancer
         state: directory
+        mode: '0755'
 
     - name: Copy config file for firedancer user
       copy:
@@ -108,4 +109,3 @@
       systemd:
         name: firedancer
         enabled: yes
-        state: started
