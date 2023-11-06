@@ -97,7 +97,9 @@
         group: root
         mode: '0644'
 
-    - name: Enable and start firedancer service
+    - name: Reload systemd, enable
       systemd:
         name: firedancer
-        enabled: yes
+        daemon_reload: yes  # Reloads systemd to pick up new service file
+        enabled: yes        # Enables the service to start at boot
+
