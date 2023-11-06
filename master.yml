@@ -8,4 +8,5 @@
 - name: Set up Disks
   import_playbook: ./playbooks/disk-setup.yml
 
-# Rest of your master tasks or playbook imports
+- name: Deploy Firedancer
+  import_playbook: ./playbooks/deploy.yml
