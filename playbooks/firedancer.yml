@@ -42,16 +42,19 @@
         recursive: yes
 
     - name: Install firedancer
-      environment:  # Set environment variables explicitly
+      become: yes  # Ensure that we have the necessary privileges
+      environment:  # Explicitly set environment variables
         FD_AUTO_INSTALL_PACKAGES: "1"
+        PATH: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:{{ ansible_env.PATH }}"  # Add any necessary paths
       shell: |
-        set -e  # If a command fails, exit immediately
+        set -e  # Exit immediately on error
+        source /etc/profile  # Load system-wide environment variables
+        source ~/.bash_profile || true  # Safely source user-specific profile, if it exists
         cd {{ firedancer_dir }}
         ./deps.sh check install
         make -j fdctl solana
       args:
-        executable: /bin/bash # Use bash to execute the script
-
+        executable: /bin/bash  # Specify bash as the shell to use
 
     - name: Copy firedancer to your path
       copy:
