@@ -9,57 +9,58 @@
     - name: Check if /srv is already mounted
       ansible.builtin.shell: mount | grep 'on {{ mount_point }} type'
       register: mount_check
-      failed_when: mount_check.rc == 0
       changed_when: false
-      check_mode: no
+      ignore_errors: true
 
-    - name: Exit if /srv is already mounted
-      ansible.builtin.meta: end_play
+    - name: Skip remaining tasks if /srv is already mounted
+      ansible.builtin.meta: end_host
       when: mount_check.rc == 0
 
-    - name: Detect the 1.8T drive
-      ansible.builtin.shell: |
-        lsblk -o NAME,SIZE -dn | grep '{{ expected_size }}' | head -n 1 | awk '{print $1}'
-      register: disk_detection
+    - block:
+        - name: Detect the 1.8T drive
+          ansible.builtin.shell: |
+            lsblk -o NAME,SIZE -dn | grep '{{ expected_size }}' | head -n 1 | awk '{print $1}'
+          register: disk_detection
 
-    - name: Set detected disk variable
-      set_fact:
-        disk_name: "/dev/{{ disk_detection.stdout }}"
+        - name: Set detected disk variable
+          set_fact:
+            disk_name: "/dev/{{ disk_detection.stdout }}"
 
-    - name: Create filesystem on the detected disk
-      ansible.builtin.filesystem:
-        fstype: "{{ filesystem }}"
-        dev: "{{ disk_name }}"
+        - name: Create filesystem on the detected disk
+          ansible.builtin.filesystem:
+            fstype: "{{ filesystem }}"
+            dev: "{{ disk_name }}"
 
-    - name: Create mount point
-      ansible.builtin.file:
-        path: "{{ mount_point }}"
-        state: directory
+        - name: Create mount point
+          ansible.builtin.file:
+            path: "{{ mount_point }}"
+            state: directory
 
-    - name: Get the UUID of the 1.8T drive
-      ansible.builtin.command: blkid -o value -s UUID {{ disk_name }}
-      register: blkid_output
+        - name: Get the UUID of the 1.8T drive
+          ansible.builtin.command: blkid -o value -s UUID {{ disk_name }}
+          register: blkid_output
 
-    - name: Set the UUID fact
-      set_fact:
-        disk_uuid: "{{ blkid_output.stdout }}"
+        - name: Set the UUID fact
+          set_fact:
+            disk_uuid: "{{ blkid_output.stdout }}"
 
-    - name: Remove any existing fstab entries for the block device UUID
-      ansible.builtin.lineinfile:
-        path: /etc/fstab
-        regexp: '^UUID={{ disk_uuid }}\s'
-        state: absent
+        - name: Remove any existing fstab entries for the block device UUID
+          ansible.builtin.lineinfile:
+            path: /etc/fstab
+            regexp: '^UUID={{ disk_uuid }}\s'
+            state: absent
 
-    - name: Add the new entry to /etc/fstab using UUID
-      ansible.builtin.lineinfile:
-        path: /etc/fstab
-        line: "UUID={{ disk_uuid }} {{ mount_point }} {{ filesystem }} defaults 0 2"
-        create: yes
+        - name: Add the new entry to /etc/fstab using UUID
+          ansible.builtin.lineinfile:
+            path: /etc/fstab
+            line: "UUID={{ disk_uuid }} {{ mount_point }} {{ filesystem }} defaults 0 2"
+            create: yes
 
-    - name: Mount filesystem using UUID
-      ansible.builtin.mount:
-        path: "{{ mount_point }}"
-        src: "UUID={{ disk_uuid }}"
-        fstype: "{{ filesystem }}"
-        opts: defaults
-        state: mounted
+        - name: Mount filesystem using UUID
+          ansible.builtin.mount:
+            path: "{{ mount_point }}"
+            src: "UUID={{ disk_uuid }}"
+            fstype: "{{ filesystem }}"
+            opts: defaults
+            state: mounted
+      when: mount_check.rc != 0
