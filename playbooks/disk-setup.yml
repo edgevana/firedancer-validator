@@ -7,12 +7,15 @@
 
   tasks:
     - name: Check if /data is already mounted
-      ansible.builtin.mount_info:
-      register: mount_info
+      ansible.builtin.shell: mount | grep 'on {{ mount_point }} type'
+      register: mount_check
+      failed_when: mount_check.rc != 0 and 'is not mounted' not in mount_check.stdout
+      changed_when: false
+      check_mode: no
 
     - name: Exit if /data is already mounted
       ansible.builtin.meta: end_play
-      when: mount_info.mounts | selectattr('mount', 'equalto', mount_point) | list | count > 0
+      when: mount_check.stdout != ""
 
     - name: Detect the 1.8T drive
       ansible.builtin.shell: |
