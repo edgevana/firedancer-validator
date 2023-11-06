@@ -42,10 +42,17 @@
         recursive: yes
 
     - name: Install firedancer
+      become_user: "{{ ansible_user }}" # ensure it's run as the correct user
+      environment:  # Set environment variables explicitly
+        FD_AUTO_INSTALL_PACKAGES: "1"
       shell: |
+        set -e  # If a command fails, exit immediately
         cd {{ firedancer_dir }}
-        FD_AUTO_INSTALL_PACKAGES=1 ./deps.sh check install
+        ./deps.sh check install
         make -j fdctl solana
+      args:
+        executable: /bin/bash # Use bash to execute the script
+
 
     - name: Copy firedancer to your path
       copy:
