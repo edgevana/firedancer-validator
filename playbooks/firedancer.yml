@@ -7,6 +7,8 @@
     firedancer_repo: "https://github.com/firedancer-io/firedancer.git"
     firedancer_dir: "{{ user_home }}/firedancer"
     ledger_mount_point: "/srv/solana"
+    script_path: "/tmp/build.sh"  # Temporary path for the script on the remote server
+
 
   tasks:
     - name: Install the latest security updates
@@ -41,20 +43,17 @@
         dest: "{{ firedancer_dir }}"
         recursive: yes
 
-    - name: Install firedancer
-      become: yes  # Ensure that we have the necessary privileges
-      environment:  # Explicitly set environment variables
-        FD_AUTO_INSTALL_PACKAGES: "1"
-        PATH: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:{{ ansible_env.PATH }}"  # Add any necessary paths
-      shell: |
-        set -e  # Exit immediately on error
-        source /etc/profile  # Load system-wide environment variables
-        source ~/.bash_profile || true  # Safely source user-specific profile, if it exists
-        cd {{ firedancer_dir }}
-        ./deps.sh check install
-        make -j fdctl solana
+    - name: Copy build script to remote server
+      copy:
+        src: ./files/build.sh
+        dest: "{{ script_path }}"
+        mode: '0755'
+
+    - name: Execute build script
+      shell: "{{ script_path }}"
       args:
-        executable: /bin/bash  # Specify bash as the shell to use
+        chdir: "{{ firedancer_dir }}"  # Execute the script in the firedancer directory
+        executable: /bin/bash
 
     - name: Copy firedancer to your path
       copy:
