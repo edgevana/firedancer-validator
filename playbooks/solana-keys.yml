@@ -33,6 +33,14 @@
         - /home/firedancer/vote-account-keypair.json
         - /home/firedancer/authorized-withdrawer-keypair.json
 
+    - name: Change ownership of /home/firedancer to firedancer user and group
+      file:
+        path: /home/firedancer
+        state: directory
+        recurse: yes
+        owner: firedancer
+        group: firedancer
+
     - name: Airdrop SOL to validator keypair
       command:
         cmd: solana airdrop 1 validator-keypair.json
