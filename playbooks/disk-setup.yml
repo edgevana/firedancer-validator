@@ -6,6 +6,14 @@
     filesystem: "ext4"
 
   tasks:
+    - name: Check if /data is already mounted
+      ansible.builtin.mount_info:
+      register: mount_info
+
+    - name: Exit if /data is already mounted
+      ansible.builtin.meta: end_play
+      when: mount_info.mounts | selectattr('mount', 'equalto', mount_point) | list | count > 0
+
     - name: Detect the 1.8T drive
       ansible.builtin.shell: |
         lsblk -o NAME,SIZE -dn | grep '{{ expected_size }}' | head -n 1 | awk '{print $1}'
