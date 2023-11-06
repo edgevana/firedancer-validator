@@ -9,7 +9,7 @@ user = "firedancer"
 
 [consensus]
     identity_path = "/home/firedancer/validator-keypair.json"
-    vote_account_path = "/home/firedancer/vote-keypair.json"
+    vote_account_path = "/home/firedancer/vote-account-keypair.json"
     expected_genesis_hash = "4uhcVJyU9pJkvQyS88uRDiswHXSCkY3zQawwpjk2NsNY"
     known_validators = [
         "5D1fNXzvv5NjV1ysLjirC4WY92RNsVH18vjmcszZd8on",
@@ -30,4 +30,3 @@ user = "firedancer"
 
 [ledger]
     path = "/srv/solana"
-    
