@@ -70,7 +70,7 @@
 
     - name: Copy config file for firedancer user
       copy:
-        src: "./files/config.yml"
+        src: "../files/config.yml"
         dest: "{{ user_home }}/config.yml"
         owner: firedancer
         group: firedancer
@@ -89,26 +89,13 @@
               sudo fdctl run --config {{ user_home }}/config.toml
             mode: '0755'
 
-    - name: Create systemd service
+    - name: Copy Firedancer systemd service file
       copy:
+        src: ../files/firedancer.service
         dest: /etc/systemd/system/firedancer.service
-        content: |
-          [Unit]
-          Description=Firedancer Solana Validator
-          After=network.target
-          StartLimitIntervalSec=0
-
-          [Service]
-          Type=simple
-          Restart=always
-          RestartSec=1
-          User=firedancer
-          LimitNOFILE=1000000
-          LogRateLimitIntervalSec=0
-          ExecStart={{ user_home }}/bin/validator.sh
-
-          [Install]
-          WantedBy=multi-user.target
+        owner: root
+        group: root
+        mode: '0644'
 
     - name: Enable and start firedancer service
       systemd:

@@ -1,0 +1,16 @@
+[Unit]
+Description=Firedancer Solana Validator
+After=network.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+User=firedancer
+LimitNOFILE=1000000
+LogRateLimitIntervalSec=0
+ExecStart={{ user_home }}/bin/validator.sh
+
+[Install]
+WantedBy=multi-user.target
