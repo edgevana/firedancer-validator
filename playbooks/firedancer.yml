@@ -1,6 +1,6 @@
 ---
 - name: Setup Firedancer Environment
-  hosts: your_target_host
+  hosts: all
   become: yes
   vars:
     user_home: "/home/{{ ansible_user }}"

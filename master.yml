@@ -9,4 +9,4 @@
   import_playbook: ./playbooks/disk-setup.yml
 
 - name: Deploy Firedancer
-  import_playbook: ./playbooks/deploy.yml
+  import_playbook: ./playbooks/firedancer.yml
