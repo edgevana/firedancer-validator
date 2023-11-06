@@ -1,30 +1,35 @@
----
-- name: Generate Solana keypairs and airdrop SOL
+- name: Generate Solana keypairs and set ownership
   hosts: all
-  become: yes
   gather_facts: no
-
   tasks:
     - name: Generate validator keypair
-      command:
-        cmd: solana-keygen new -o validator-keypair.json
-        chdir: /home/firedancer/
+      shell: solana-keygen new --no-bip39-passphrase --outfile validator-keypair.json
       args:
+        chdir: /home/firedancer/
         creates: /home/firedancer/validator-keypair.json
 
     - name: Generate vote account keypair
-      command:
-        cmd: solana-keygen new -o vote-account-keypair.json
-        chdir: /home/firedancer/
+      shell: solana-keygen new --no-bip39-passphrase --outfile vote-account-keypair.json
       args:
+        chdir: /home/firedancer/
         creates: /home/firedancer/vote-account-keypair.json
 
     - name: Generate authorized withdrawer keypair
-      command:
-        cmd: solana-keygen new -o authorized-withdrawer-keypair.json
-        chdir: /home/firedancer/
+      shell: solana-keygen new --no-bip39-passphrase --outfile authorized-withdrawer-keypair.json
       args:
+        chdir: /home/firedancer/
         creates: /home/firedancer/authorized-withdrawer-keypair.json
+
+    - name: Set keypair permissions
+      file:
+        path: "{{ item }}"
+        mode: 0600
+        owner: firedancer
+        group: firedancer
+      with_items:
+        - /home/firedancer/validator-keypair.json
+        - /home/firedancer/vote-account-keypair.json
+        - /home/firedancer/authorized-withdrawer-keypair.json
 
     - name: Airdrop SOL to validator keypair
       command:
@@ -42,11 +47,3 @@
       debug:
         msg: "{{ airdrop_result.stderr_lines }}"
       when: airdrop_result is defined and airdrop_result.rc != 0
-
-    - name: Ensure ownership of /home/firedancer/
-      file:
-        path: /home/firedancer/
-        state: directory
-        recurse: yes
-        owner: firedancer
-        group: firedancer
