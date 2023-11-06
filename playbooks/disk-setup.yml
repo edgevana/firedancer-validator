@@ -1,19 +1,19 @@
 - hosts: all
   become: yes
   vars:
-    mount_point: "/data"
+    mount_point: "/srv"
     expected_size: "1.8T"
     filesystem: "ext4"
 
   tasks:
-    - name: Check if /data is already mounted
+    - name: Check if /srv is already mounted
       ansible.builtin.shell: mount | grep 'on {{ mount_point }} type'
       register: mount_check
       failed_when: mount_check.rc != 0 and 'is not mounted' not in mount_check.stdout
       changed_when: false
       check_mode: no
 
-    - name: Exit if /data is already mounted
+    - name: Exit if /srv is already mounted
       ansible.builtin.meta: end_play
       when: mount_check.stdout != ""
 
