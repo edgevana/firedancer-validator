@@ -15,3 +15,19 @@
       args:
         executable: /bin/bash
         chdir: "{{ ansible_env.HOME }}"  # Execute in the user's home directory
+
+    - name: Find Solana binaries
+      find:
+        paths: "/root/.local/share/solana/install/active_release/bin"
+        file_type: file
+      register: solana_binaries  # This variable will store the result of the find module
+
+    - name: Copy Solana binaries to /usr/local/bin
+      copy:
+        src: "{{ item.path }}"
+        dest: "/usr/local/bin/{{ item.path | basename }}"
+        remote_src: yes  # Specifies that the source is on the remote machine
+        mode: '0755'  # Ensure the binaries are executable
+      with_items: "{{ solana_binaries.files }}"
+      loop_control:
+        loop_var: item
