@@ -8,7 +8,7 @@
     firedancer_dir: "{{ user_home }}/firedancer"
     ledger_mount_point: "/srv/solana"
     script_path: "/tmp/build.sh"  # Temporary path for the script on the remote server
-
+    script_path2: "/tmp/solana-install.sh" 
 
   tasks:
     - name: Install the latest security updates
@@ -31,6 +31,18 @@
         repo: "{{ firedancer_repo }}"
         dest: "{{ firedancer_dir }}"
         recursive: yes
+
+    - name: Copy build script to remote server
+      copy:
+        src: ../files/build.sh
+        dest: "{{ script_path2 }}"
+        mode: '0755'
+
+    - name: Execute build script
+      shell: "{{ script_path2 }}"
+      args:
+        chdir: "{{ firedancer_dir }}"  # Execute the script in the firedancer directory
+        executable: /bin/bash
 
     - name: Copy build script to remote server
       copy:
