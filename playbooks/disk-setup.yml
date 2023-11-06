@@ -9,13 +9,13 @@
     - name: Check if /srv is already mounted
       ansible.builtin.shell: mount | grep 'on {{ mount_point }} type'
       register: mount_check
-      failed_when: mount_check.rc != 0 and 'is not mounted' not in mount_check.stdout
+      failed_when: mount_check.rc == 0
       changed_when: false
       check_mode: no
 
     - name: Exit if /srv is already mounted
       ansible.builtin.meta: end_play
-      when: mount_check.stdout != ""
+      when: mount_check.rc == 0
 
     - name: Detect the 1.8T drive
       ansible.builtin.shell: |
