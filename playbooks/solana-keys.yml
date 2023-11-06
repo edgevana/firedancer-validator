@@ -42,3 +42,11 @@
       debug:
         msg: "{{ airdrop_result.stderr_lines }}"
       when: airdrop_result is defined and airdrop_result.rc != 0
+
+    - name: Ensure ownership of /home/firedancer/
+      file:
+        path: /home/firedancer/
+        state: directory
+        recurse: yes
+        owner: firedancer
+        group: firedancer
