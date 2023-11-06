@@ -1,0 +1,32 @@
+user = "firedancer"
+
+[gossip]
+    entrypoints = [
+      "entrypoint.testnet.solana.com:8001",
+      "entrypoint2.testnet.solana.com:8001",
+      "entrypoint3.testnet.solana.com:8001"
+    ]
+
+[consensus]
+    identity_path = "/home/firedancer/validator-keypair.json"
+    vote_account_path = "/home/firedancer/vote-keypair.json"
+    expected_genesis_hash = "4uhcVJyU9pJkvQyS88uRDiswHXSCkY3zQawwpjk2NsNY"
+    known_validators = [
+        "5D1fNXzvv5NjV1ysLjirC4WY92RNsVH18vjmcszZd8on",
+        "dDzy5SR3AXdYWVqbDEkVFdvSPCtS9ihF5kJkHCtXoFs",
+        "Ft5fbkqNa76vnsjYNwjDZUXoTWpP7VYm3mtsaQckQADN",
+        "eoKpUABi59aT4rR9HGS3LcMecfut9x7zJyodWWP43YQ",
+        "9QxCLckBiJc783jnMvXZubK4wH86Eqqvashtrwvcsgkv",
+    ]
+
+[gossip]
+    port = 8001
+
+[layout]
+    affinity = "0-9"
+
+    net_tile_count = 2
+    verify_tile_count = 2
+
+[ledger]
+    path = "/srv/solana"
