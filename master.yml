@@ -13,3 +13,6 @@
 
 - name: Install Solana CLI
   import_playbook: ./playbooks/solana-install.yml
+
+- name: Keys and Airdrop
+  import_playbook: ./playbooks/solana-keys.yml

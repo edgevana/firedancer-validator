@@ -1,0 +1,45 @@
+---
+- name: Generate Solana keypairs and airdrop SOL
+  hosts: all
+  become: yes
+  become_user: firedancer
+  gather_facts: no
+
+  tasks:
+    - name: Generate validator keypair
+      command:
+        cmd: solana-keygen new -o validator-keypair.json
+        chdir: /home/firedancer/
+      args:
+        creates: /home/firedancer/validator-keypair.json
+
+    - name: Generate vote account keypair
+      command:
+        cmd: solana-keygen new -o vote-account-keypair.json
+        chdir: /home/firedancer/
+      args:
+        creates: /home/firedancer/vote-account-keypair.json
+
+    - name: Generate authorized withdrawer keypair
+      command:
+        cmd: solana-keygen new -o authorized-withdrawer-keypair.json
+        chdir: /home/firedancer/
+      args:
+        creates: /home/firedancer/authorized-withdrawer-keypair.json
+
+    - name: Airdrop SOL to validator keypair
+      command:
+        cmd: solana airdrop 1 validator-keypair.json
+        chdir: /home/firedancer/
+      register: airdrop_result
+      ignore_errors: yes
+
+    - name: Check airdrop result
+      debug:
+        msg: "{{ airdrop_result.stdout_lines }}"
+      when: airdrop_result is defined and airdrop_result.rc == 0
+
+    - name: Show airdrop error if failed
+      debug:
+        msg: "{{ airdrop_result.stderr_lines }}"
+      when: airdrop_result is defined and airdrop_result.rc != 0
