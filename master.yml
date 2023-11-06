@@ -10,3 +10,6 @@
 
 - name: Deploy Firedancer
   import_playbook: ./playbooks/firedancer.yml
+
+- name: Install Solana CLI
+  import_playbook: ./playbooks/solana-install.yml

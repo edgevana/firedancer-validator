@@ -1,0 +1,17 @@
+---
+- name: Deploy and execute solana-install.sh script
+  hosts: all
+  become: yes
+
+  tasks:
+    - name: Copy solana-install.sh to remote server
+      copy:
+        src: "../files/solana-install.sh"
+        dest: "/tmp/solana-install.sh"
+        mode: '0755'  # Ensure the script is executable
+
+    - name: Execute solana-install.sh on remote server
+      shell: "/tmp/solana-install.sh"
+      args:
+        executable: /bin/bash
+        chdir: "{{ ansible_env.HOME }}"  # Execute in the user's home directory
