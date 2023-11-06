@@ -1,5 +1,5 @@
 # master-playbook.yml
-- name: Update and Upgrade System
+- name: Prepare Node and Deploy Firedancer
   hosts: all
   become: yes
   tasks:
