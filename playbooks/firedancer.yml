@@ -42,7 +42,6 @@
         recursive: yes
 
     - name: Install firedancer
-      become_user: "{{ ansible_user }}" # ensure it's run as the correct user
       environment:  # Set environment variables explicitly
         FD_AUTO_INSTALL_PACKAGES: "1"
       shell: |
