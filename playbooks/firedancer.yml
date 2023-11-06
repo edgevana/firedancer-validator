@@ -45,7 +45,7 @@
 
     - name: Copy build script to remote server
       copy:
-        src: ./files/build.sh
+        src: ../files/build.sh
         dest: "{{ script_path }}"
         mode: '0755'
 
