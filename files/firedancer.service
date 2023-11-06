@@ -10,7 +10,7 @@ RestartSec=1
 User=firedancer
 LimitNOFILE=1000000
 LogRateLimitIntervalSec=0
-ExecStart={{ user_home }}/bin/validator.sh
+ExecStart=/home/firedancer/bin/validator.sh
 
 [Install]
 WantedBy=multi-user.target
