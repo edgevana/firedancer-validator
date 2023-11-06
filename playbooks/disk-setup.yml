@@ -2,7 +2,7 @@
   become: yes
   vars:
     mount_point: "/srv"
-    expected_size: "1.8T"
+    expected_size: "1.7T"
     filesystem: "ext4"
 
   tasks:
