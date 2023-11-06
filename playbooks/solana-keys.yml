@@ -1,6 +1,8 @@
 - name: Generate Solana keypairs and set ownership
   hosts: all
   gather_facts: no
+  become: yes
+
   tasks:
     - name: Generate validator keypair
       shell: solana-keygen new --no-bip39-passphrase --outfile validator-keypair.json
