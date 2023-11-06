@@ -1,0 +1,11 @@
+# master-playbook.yml
+- name: Update and Upgrade System
+  hosts: all
+  become: yes
+  tasks:
+    # Your tasks for updating and upgrading the system here
+
+- name: Set up Disks
+  import_playbook: ./playbooks/disk-setup.yml
+
+# Rest of your master tasks or playbook imports

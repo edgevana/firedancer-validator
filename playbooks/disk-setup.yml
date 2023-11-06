@@ -1,0 +1,40 @@
+- hosts: all
+  become: yes
+  vars:
+    mount_point: "/data"
+    expected_size: "1.8T"
+    filesystem: "ext4"
+
+  tasks:
+    - name: Detect the 1.8T drive
+      ansible.builtin.shell: |
+        lsblk -o NAME,SIZE -dn | grep '{{ expected_size }}' | head -n 1 | awk '{print $1}'
+      register: disk_detection
+
+    - name: Set detected disk variable
+      set_fact:
+        disk_name: "/dev/{{ disk_detection.stdout }}"
+
+    - name: Create filesystem on the detected disk
+      ansible.builtin.filesystem:
+        fstype: "{{ filesystem }}"
+        dev: "{{ disk_name }}"
+
+    - name: Create mount point
+      ansible.builtin.file:
+        path: "{{ mount_point }}"
+        state: directory
+
+    - name: Mount the filesystem
+      ansible.builtin.mount:
+        path: "{{ mount_point }}"
+        src: "{{ disk_name }}"
+        fstype: "{{ filesystem }}"
+        state: mounted
+        opts: defaults
+
+    - name: Add to /etc/fstab
+      ansible.builtin.lineinfile:
+        path: /etc/fstab
+        line: "{{ disk_name }} {{ mount_point }} {{ filesystem }} defaults 0 2"
+        create: yes
