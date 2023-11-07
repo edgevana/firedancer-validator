@@ -57,7 +57,8 @@ To enable it, remove the `#`:
   import_playbook: ./playbooks/disk-setup.yml
 ```
 
-Repeat this process for any other tasks you wish to customize.
+Repeat this process for any other tasks you wish to customize. Please note that disk partitioning is specific to our hardware configuration; review and edit as necessary to suit your environment.
+
 
 ## Support
-For assistance or to report issues with the playbook, please reach out to the support team or visit the [issue tracker](#).
+For assistance or to report issues with the playbook, please reach out to the support team or open an issue.
