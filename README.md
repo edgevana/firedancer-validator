@@ -7,8 +7,14 @@
 ## Overview
 This guide provides instructions for deploying Firedancer nodes using Ansible. Ansible is an open-source automation tool that can be used for configuration management and application deployment.
 
+
 ## Pre-requisites
-Before running the playbook, ensure you have Ansible installed on your system. Additionally, a public IP address and port forwarding for ports 8000 to 8020 are required for proper node operation.
+Before running the playbook, ensure you have the following:
+
+- Ansible installed on your system.
+- A static public IP address.
+- Ports 8000 to 8020 available and open for communication on your network firewall and router.
+
 
 ## Running the Playbook
 
