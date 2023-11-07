@@ -34,7 +34,7 @@
 
     - name: Copy build script to remote server
       copy:
-        src: ../files/build.sh
+        src: ../files/solana-install.sh
         dest: "{{ script_path2 }}"
         mode: '0755'
 
