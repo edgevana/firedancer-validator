@@ -4,6 +4,8 @@
 
 # Firedancer Node Deployment Guide
 
+**Firedancer is early stage software and should only be deployed on testnet / devnet now. Please do not deploy on mainnet yet.**
+
 ## Overview
 This guide provides instructions for deploying Firedancer nodes using Ansible. Ansible is an open-source automation tool that can be used for configuration management and application deployment.
 
