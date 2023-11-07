@@ -11,7 +11,7 @@ ansible-playbook master.yml -i '<ip-address>,' -u ubuntu -K
 If you are running it over localhost, put localhost.
 
 ```shell
-ansible-playbook master.yml -i '<ip-address>,' -u ubuntu -K
+ansible-playbook master.yml -i 'localhost,' -u ubuntu -K
 ```
 
 Comment out the options you dont need within the master.yml, such as disk paritioning and keygeneration.
