@@ -41,24 +41,24 @@
         owner: firedancer
         group: firedancer
 
-    - name: Change directory to firedancer home and run a command
-      command:
-        cmd: solana config set --keypair validator-keypair.json
-        chdir: /home/firedancer
+#    - name: Change directory to firedancer home and run a command
+#      command:
+#        cmd: solana config set --keypair validator-keypair.json
+#        chdir: /home/firedancer
 
-    - name: Airdrop SOL to validator keypair
-      command:
-        cmd: solana airdrop 1 validator-keypair.json
-        chdir: /home/firedancer/
-      register: airdrop_result
-      ignore_errors: yes
+#    - name: Airdrop SOL to validator keypair
+#      command:
+#        cmd: solana airdrop 1 validator-keypair.json
+#        chdir: /home/firedancer/
+#      register: airdrop_result
+#      ignore_errors: yes
 
-    - name: Check airdrop result
-      debug:
-        msg: "{{ airdrop_result.stdout_lines }}"
-      when: airdrop_result is defined and airdrop_result.rc == 0
+#    - name: Check airdrop result
+#      debug:
+#        msg: "{{ airdrop_result.stdout_lines }}"
+#      when: airdrop_result is defined and airdrop_result.rc == 0
 
-    - name: Show airdrop error if failed
-      debug:
-        msg: "{{ airdrop_result.stderr_lines }}"
-      when: airdrop_result is defined and airdrop_result.rc != 0
+#    - name: Show airdrop error if failed
+#      debug:
+#        msg: "{{ airdrop_result.stderr_lines }}"
+#      when: airdrop_result is defined and airdrop_result.rc != 0
